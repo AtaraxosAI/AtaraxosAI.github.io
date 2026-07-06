@@ -1,0 +1,2 @@
+15 wins, 1 loss, 4 draws
+0.7 empirical value

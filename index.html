@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ataraxos — Stratego game archive</title>
+  <meta name="description" content="An archive of Stratego games played by Ataraxos against a Stratego World Champion." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♟️</text></svg>" />
+</head>
+<body>
+  <div class="sheet">
+
+    <!-- Hero -->
+    <header class="hero">
+      <h1 class="title">Ataraxos</h1>
+      <p class="subtitle">The first superhuman Stratego agent — its gameplay records against a World Champion.</p>
+
+      <div class="record-panel" id="stats" aria-label="Match record"><!-- filled by app.js --></div>
+    </header>
+
+    <!-- Intro -->
+    <section class="section intro">
+      <div class="prose">
+        <p>We evaluated Ataraxos playing on a single H100 against Pim Niemeijer, a player whose accolades include: 4 world championships (the most of any active player and tied for the most of all time); 15 Dutch national championships (the most of all time); 2 online world championships (the most of all time); and over 600 weeks as the #1 ranked player (the most of all time). According to George Franka, the only player to compete in every world championship since 1997, Pim is “the best Stratego player ever”.</p>
+
+        <p>Ataraxos won the 20-game series with 15 wins, 1 loss and 4 draws, an 85% effective win rate. That margin is unprecedented at the highest level of human play, where the risk inherent to top competition keeps results razor-thin. Ataraxos achieved such a margin despite a large handicap: the evaluation was structurally asymmetric, allowing Pim to adapt to Ataraxos over the course of the series while Ataraxos could not adapt to Pim.</p>
+
+        <p>Using the same techniques, we also built the first superhuman AI for Barrage Stratego, as well as the state-of-the-art AI for Hanabi and <em>dou dizhu</em>.</p>
+      </div>
+    </section>
+
+    <!-- Games -->
+    <section class="section games">
+      <div class="section-head">
+        <h2>Games</h2>
+        <div class="filters" id="filters" role="group" aria-label="Filter by result">
+          <button class="chip is-active" data-filter="all">All</button>
+          <button class="chip" data-filter="W">Wins</button>
+          <button class="chip" data-filter="L">Losses</button>
+          <button class="chip" data-filter="D">Draws</button>
+        </div>
+      </div>
+
+      <div class="games-layout">
+        <!-- Left rail: one row per game; picking one loads its replay on the right. -->
+        <ul class="game-list" id="grid" aria-label="Games"><!-- rows injected by app.js --></ul>
+
+        <!-- Right: the selected game's replay + entry to the detailed frame viewer. -->
+        <div class="game-view" id="game-view" hidden>
+          <div class="gv-head">
+            <div class="gv-titlerow">
+              <h3 class="gv-title" id="gv-title"></h3>
+              <button class="detail-btn" id="detail-btn" type="button">Detailed Log</button>
+            </div>
+            <p class="gv-meta" id="gv-meta"></p>
+          </div>
+          <div class="gv-stage">
+            <video id="gv-video" controls preload="metadata" playsinline></video>
+          </div>
+        </div>
+      </div>
+      <p class="empty" id="empty" hidden>No games match this filter.</p>
+    </section>
+
+  </div><!-- /.sheet -->
+
+  <!-- Lightbox: per-move frame viewer. All controls live in the top bar so the
+       frame below is never overlapped. Only the current frame is loaded (plus a
+       couple prefetched neighbors), so the page stays memory- and bandwidth-light. -->
+  <div class="lightbox" id="lightbox" hidden aria-modal="true" role="dialog" aria-labelledby="lb-title">
+    <div class="lightbox-backdrop" data-close></div>
+    <div class="lightbox-panel" role="document">
+      <div class="lb-accent" id="lb-accent" aria-hidden="true"></div>
+      <div class="lightbox-bar">
+        <div class="lightbox-heading">
+          <h2 id="lb-title" class="lightbox-title"></h2>
+          <p class="lightbox-meta" id="lb-meta"></p>
+        </div>
+        <div class="lightbox-controls">
+          <button class="icon-btn wide" id="lb-gprev" aria-label="Previous game ([)" title="Previous game">‹ Prev game</button>
+          <button class="icon-btn wide" id="lb-gnext" aria-label="Next game (])" title="Next game">Next game ›</button>
+          <span class="ctrl-divider" aria-hidden="true"></span>
+          <div class="t-step">
+            <button class="icon-btn" id="lb-prev" aria-label="Previous t (←)" title="Previous move">‹</button>
+            <span class="t-readout" id="lb-frameinfo"></span>
+            <button class="icon-btn" id="lb-next" aria-label="Next t (→)" title="Next move">›</button>
+          </div>
+          <button class="icon-btn" id="lb-play" aria-label="Play/pause (Space)" title="Play / pause">▶</button>
+          <input type="range" id="lb-slider" min="0" value="0" step="1" aria-label="Move slider" />
+          <span class="ctrl-divider" aria-hidden="true"></span>
+          <button class="icon-btn" id="lb-close" data-close aria-label="Close (Esc)" title="Close">✕</button>
+        </div>
+      </div>
+      <div class="lightbox-stage">
+        <img id="lb-frame" alt="" decoding="async" />
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/app.js" defer></script>
+</body>
+</html>

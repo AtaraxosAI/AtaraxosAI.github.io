@@ -1,0 +1,14 @@
+# The raw per-move screenshots are ~12 GB — far over GitHub's limits. The
+# viewer instead fetches the compressed AVIFs under Nortrom/frames_cropped/
+# (~0.7 GB), generated from these by build.py. Keep the raw PNGs out of the repo.
+Nortrom/logs/
+
+# Full-height AVIF renders (~0.6 GB). The site only fetches frames_cropped/,
+# so keep these out to stay under GitHub's ~1 GB repo soft limit. They are
+# regenerable from Nortrom/logs/ via build.py.
+Nortrom/frames/
+
+# Local build cruft
+.DS_Store
+**/.DS_Store
+__pycache__/

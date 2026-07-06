@@ -1,0 +1,261 @@
+:root {
+  /* Three depth layers: backdrop < sheet < panel — separated by shade, not lines. */
+  --bg: #0b0c10;
+  --bg-line: rgba(255, 255, 255, 0.016);
+  --sheet: #14161d;
+  --panel: #1a1d26;
+  --panel-hi: #21252f;
+
+  --ink: #e9eaee;
+  --ink-soft: #a6abb6;
+  --ink-faint: #6d727c;
+
+  --accent: #8b9bff;              /* the one accent */
+  --accent-soft: rgba(139, 155, 255, 0.14);
+
+  /* Muted, low-saturation outcome tints so the grid stays coherent. */
+  --win: #63b98f;   --win-soft: rgba(99, 185, 143, 0.13);
+  --draw: #c2a15f;  --draw-soft: rgba(194, 161, 95, 0.13);
+  --loss: #d4897f;  --loss-soft: rgba(212, 137, 127, 0.14);
+
+  --radius: 14px;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.45), 0 22px 48px -26px rgba(0, 0, 0, 1);
+  --hairline: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* Backdrop: a faint diagonal weave over deep ink, with a soft top glow. */
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1100px 620px at 50% -260px, rgba(139, 155, 255, 0.06), transparent 70%),
+    repeating-linear-gradient(135deg, var(--bg-line) 0, var(--bg-line) 1px, transparent 1px, transparent 5px);
+  background-attachment: fixed;
+}
+
+/* ---------- Sheet: the raised canvas over the backdrop ---------- */
+.sheet {
+  width: calc(100% - 40px);
+  max-width: 1080px;
+  margin: 52px auto;
+  padding: 0 40px 56px;
+  background: var(--sheet);
+  border-radius: 20px;
+  box-shadow: var(--hairline), 0 44px 120px -54px rgba(0, 0, 0, 1);
+}
+
+/* ---------- Hero ---------- */
+.hero { max-width: 1000px; margin: 0 auto; padding: 76px 0 8px; text-align: center; }
+.title {
+  margin: 0; font-family: var(--serif); font-weight: 600;
+  font-size: clamp(2rem, 5vw, 3rem); line-height: 1.12; letter-spacing: -.02em;
+}
+.subtitle {
+  margin: 18px auto 0; max-width: 60ch;
+  font-family: var(--serif); font-style: italic; font-size: clamp(1.05rem, 2.3vw, 1.28rem);
+  color: var(--ink-soft); line-height: 1.5;
+}
+
+/* ---------- Intro prose ---------- */
+.intro .prose { max-width: 600px; margin: 0 auto; }
+.intro .prose p { margin: 0 0 18px; color: var(--ink-soft); }
+.intro .prose p:first-child { margin-top: 0; }
+.intro .prose p:last-child { margin-bottom: 0; }
+
+/* ---------- Record panel: one combined stat, record + effective win rate ---------- */
+.record-panel { margin-top: 40px; }
+.scoreline {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: clamp(22px, 5vw, 48px);
+  max-width: 600px; margin: 0 auto; padding: 22px 32px;
+  background: var(--panel); border-radius: var(--radius); box-shadow: var(--hairline);
+}
+.score { display: flex; align-items: flex-start; gap: 16px; }
+.score .unit { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.s-num { font-weight: 600; font-size: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
+.s-lab, .wr-lab { font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+.s-sep { font-weight: 400; font-size: 34px; line-height: 40px; color: var(--ink-faint); }
+.scoreline .rec-w { color: var(--win); }
+.scoreline .rec-l { color: var(--loss); }
+.scoreline .rec-d { color: var(--draw); }
+.wr {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding-left: clamp(22px, 5vw, 48px); border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+.wr-num { font-weight: 600; font-size: 40px; line-height: 1; color: var(--accent); }
+
+@media (max-width: 440px) {
+  .wr { width: 100%; padding-left: 0; padding-top: 18px; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+}
+
+/* ---------- Section ---------- */
+.section { max-width: 1000px; margin: 0 auto; padding: 44px 0 0; }
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 22px; flex-wrap: wrap; }
+.section h2 { margin: 0; font-weight: 600; font-size: 1.55rem; letter-spacing: -.01em; }
+
+.filters { display: flex; gap: 8px; }
+.chip {
+  appearance: none; cursor: pointer; font: inherit; font-size: 14px; font-weight: 600;
+  color: var(--ink-soft); background: var(--panel);
+  border: none; border-radius: 999px; padding: 7px 15px;
+  box-shadow: var(--hairline);
+  transition: color .14s, background .14s, transform .14s;
+}
+.chip:hover { color: var(--ink); transform: translateY(-1px); }
+.chip.is-active { color: var(--accent); background: var(--accent-soft); }
+
+/* Outcome chips double as the color legend for each tab's accent bar, so the
+   tabs no longer need a Win/Loss/Draw word. A leading dot mirrors the bar. */
+.chip[data-filter="W"], .chip[data-filter="L"], .chip[data-filter="D"] {
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.chip[data-filter="W"]::before, .chip[data-filter="L"]::before, .chip[data-filter="D"]::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%;
+}
+.chip[data-filter="W"] { color: var(--win); }
+.chip[data-filter="L"] { color: var(--loss); }
+.chip[data-filter="D"] { color: var(--draw); }
+.chip[data-filter="W"]::before { background: var(--win); }
+.chip[data-filter="L"]::before { background: var(--loss); }
+.chip[data-filter="D"]::before { background: var(--draw); }
+.chip[data-filter="W"].is-active { background: var(--win-soft); }
+.chip[data-filter="L"].is-active { background: var(--loss-soft); }
+.chip[data-filter="D"].is-active { background: var(--draw-soft); }
+
+/* ---------- Games: left rail of game rows + right replay pane ---------- */
+/* Snug width: 216 rail + 22 gap + (456 portrait video + 32 pane padding) ≈ 726. */
+.section.games { max-width: 700px; }
+/* Fixed height sized to the full 20-game rail, so filtering to W/L/D never changes
+   the section height. Both columns stretch to it; the video fills the pane, the
+   rail's rows are a fixed height (fewer of them just leave space below). */
+.games-layout { display: flex; align-items: stretch; gap: 22px; height: 814px; }
+
+/* Left rail: one selectable row per game — narrow, fixed-height rows.
+   20 rows × 35px + 19 × 6px gaps = 814, filling the rail exactly. */
+.game-list { list-style: none; margin: 0; padding: 0; flex: 0 0 170px; display: flex; flex-direction: column; gap: 6px; }
+.game-list li { flex: 0 0 35px; display: flex; }
+.game-row {
+  position: relative; width: 100%; cursor: pointer; color: inherit;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 12px 0 15px; text-align: left;
+  background: var(--panel); border: none; border-radius: 10px; overflow: hidden;
+  box-shadow: var(--hairline); transition: background .14s, box-shadow .14s;
+}
+/* Outcome-colored left accent so wins/losses/draws scan at a glance. */
+.game-row::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 3px; background: var(--ink-faint); }
+.game-row.W::before { background: var(--win); }
+.game-row.L::before { background: var(--loss); }
+.game-row.D::before { background: var(--draw); }
+.game-row:hover { background: var(--panel-hi); }
+.game-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.game-row.is-selected { background: var(--panel-hi); box-shadow: var(--shadow-lift), inset 0 0 0 1px rgba(139, 155, 255, .5); }
+.gr-name { font-weight: 600; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.gr-moves { margin-left: auto; color: var(--ink-faint); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* Right pane: the selected game's replay + entry to the detailed frame viewer. */
+.game-view {
+  flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 14px;
+  background: var(--panel); border-radius: var(--radius); box-shadow: var(--hairline); padding: 16px;
+}
+.game-view[hidden] { display: none; }
+.gv-head { display: flex; flex-direction: column; gap: 4px; }
+.gv-titlerow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gv-title { margin: 0; font-weight: 600; font-size: 1.2rem; }
+.gv-meta { margin: 0; color: var(--ink-faint); font-size: 13px; font-variant-numeric: tabular-nums; }
+.detail-btn {
+  flex: none; appearance: none; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--accent); background: var(--accent-soft); border: none; border-radius: 999px;
+  padding: 8px 16px; transition: background .14s, transform .14s;
+}
+.detail-btn:hover { transform: translateY(-1px); background: rgba(139, 155, 255, .22); }
+.detail-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Portrait replay fills the fixed-height pane, centered. */
+.gv-stage { flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; }
+.gv-stage video {
+  display: block; width: auto; height: auto; max-width: 100%; max-height: 100%;
+  border-radius: 12px; background: #000; box-shadow: var(--hairline);
+}
+
+/* Narrow screens: stack the rail (two columns) above the replay; drop the fixed
+   height and restore natural row/video sizing. */
+@media (max-width: 680px) {
+  .games-layout { flex-direction: column; height: auto; }
+  .game-list { flex: none; width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
+  .game-list li { height: auto; }
+  .game-row { padding: 9px 12px; }
+  .gv-stage video { max-height: 70vh; }
+}
+
+.empty { color: var(--ink-faint); text-align: center; padding: 44px 0; }
+
+/* ---------- Lightbox ---------- */
+.lightbox { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 5vh 5vw; }
+.lightbox[hidden] { display: none; }
+.lightbox-backdrop { position: absolute; inset: 0; background: rgba(5, 6, 9, .82); backdrop-filter: blur(5px); }
+.lightbox-panel {
+  position: relative; width: min(1800px, 100%); height: 100%;
+  display: flex; flex-direction: column;
+  background: var(--sheet); border-radius: 18px; overflow: hidden;
+  box-shadow: var(--hairline), 0 50px 110px -40px rgba(0, 0, 0, 1);
+}
+/* Outcome color bar across the top of the modal (win/loss/draw), mirroring the tab. */
+.lb-accent { flex: none; height: 4px; background: var(--ink-faint); }
+.lb-accent.W { background: var(--win); }
+.lb-accent.L { background: var(--loss); }
+.lb-accent.D { background: var(--draw); }
+
+.lightbox-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px 16px; padding: 12px 16px;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .06);
+}
+/* Title + date/moves share one baseline row. */
+.lightbox-heading { flex: 0 1 auto; min-width: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
+.lightbox-title { margin: 0; font-weight: 600; font-size: 1.2rem; }
+.lightbox-meta { margin: 0; color: var(--ink-faint); font-size: 13px; font-variant-numeric: tabular-nums; }
+/* Every control lives in the top bar, so the frame below is never overlapped. */
+.lightbox-controls { flex: 1 1 auto; display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.ctrl-divider { flex: none; align-self: stretch; width: 1px; min-height: 22px; margin: 0 3px; background: rgba(255, 255, 255, .12); }
+/* t-stepper: previous t · t = value · next t */
+.t-step { flex: none; display: flex; align-items: center; gap: 6px; }
+.t-readout { min-width: 68px; text-align: center; color: var(--ink); font-size: 13px; font-variant-numeric: tabular-nums; }
+.icon-btn {
+  flex: none; appearance: none; cursor: pointer; color: var(--ink-soft);
+  background: var(--panel); border: none; border-radius: 9px; box-shadow: var(--hairline);
+  width: 34px; height: 34px; font-size: 14px; line-height: 1; transition: color .14s, background .14s;
+}
+.icon-btn.wide { width: auto; padding: 0 11px; font-size: 12px; letter-spacing: .01em; }
+.icon-btn:hover { color: var(--ink); background: var(--panel-hi); }
+.icon-btn:disabled { opacity: .35; cursor: default; }
+.icon-btn:disabled:hover { color: var(--ink-soft); background: var(--panel); }
+
+/* Frames are the bottom-cropped tree (shared width, per-frame height): render
+   them full-width with no letterbox bars, and scroll vertically when a frame is
+   taller than the stage. */
+.lightbox-stage { flex: 1 1 auto; min-height: 0; background: #000; overflow-y: auto; }
+/* Cap at the frames' native 1600px so wide monitors don't upscale them. */
+.lightbox-stage img { display: block; width: 100%; max-width: 1600px; height: auto; margin: 0 auto; background: #000; }
+.lightbox-stage img:not([src]), .lightbox-stage img[src=""] { visibility: hidden; }
+
+/* Move scrubber — now inline in the top control bar, grows to fill spare width. */
+#lb-slider { flex: 1 1 140px; min-width: 90px; height: 4px; cursor: pointer; accent-color: var(--accent); }
+#lb-slider:disabled { opacity: .4; cursor: default; }
+
+@media (max-width: 620px) {
+  .sheet { padding: 0 20px 40px; }
+  .hero { padding-top: 52px; }
+  .lightbox { padding: 3vh 3vw; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }

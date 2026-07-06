@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ataraxos — light theme preview</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #ece8df; }
+  iframe { border: 0; width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<!-- Loads the real, live index.html and recolors it to the paper palette in place.
+     Nothing here changes the actual site — it's a throwaway preview lens.
+     NOTE: must be opened over http:// (the local server), not file://,
+     or the browser blocks the iframe recolor for cross-origin reasons. -->
+<iframe id="frame" src="index.html" title="Ataraxos light preview"></iframe>
+<script>
+  const LIGHT_OVERRIDE = `
+    :root{
+      /* Shade ladder: backdrop < sheet (canvas) < panel (buttons) < panel-hi (hover).
+         Buttons sit a distinct shade below the sheet, so they read with no outline. */
+      --bg:#e6e1d5; --bg-line:rgba(150,128,92,0.10);
+      --sheet:#f8f5ef; --panel:#e8e2d4; --panel-hi:#ddd6c6;
+      --ink:#23201a; --ink-soft:#56514a; --ink-faint:#8b857b;
+      --accent:#3b4a9c; --accent-soft:#e6e9f8;
+      --win:#1f9d57; --win-soft:#e3f5ea;
+      --draw:#b0851f; --draw-soft:#f6eeda;
+      --loss:#d3493b; --loss-soft:#fbe7e4;
+      /* No bounding lines on buttons/cards: neutralize the hairline with a no-op
+         shadow (still valid inside the comma shadow lists the sheet/modal use). */
+      --hairline:0 0 transparent;
+      --shadow-lift:0 2px 4px rgba(45,38,22,.07), 0 18px 40px -18px rgba(45,38,22,.28);
+    }
+    body{ background-color:var(--bg);
+      background-image:repeating-linear-gradient(135deg,var(--bg-line) 0,var(--bg-line) 1px,transparent 1px,transparent 5px); }
+    .sheet{ box-shadow:0 1px 2px rgba(45,38,22,.05), 0 24px 70px -30px rgba(45,38,22,.35); }
+    /* Selected game row: a darker shade only, no accent ring or lift line. */
+    .game-row.is-selected{ background:#d2cab6; box-shadow:none; }
+    /* Dividers that were white-on-dark need a dark-on-light value. */
+    .scoreline .wr{ border-left-color:rgba(45,38,22,.14) !important; }
+    .ctrl-divider{ background:rgba(45,38,22,.14); }
+    .lightbox-bar{ box-shadow:inset 0 -1px 0 rgba(45,38,22,.08); }
+  `;
+  const frame = document.getElementById("frame");
+  function paint() {
+    try {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      let s = doc.getElementById("__light");
+      if (!s) { s = doc.createElement("style"); s.id = "__light"; doc.head.appendChild(s); }
+      s.textContent = LIGHT_OVERRIDE;
+    } catch (e) {
+      document.title = "Open this over http://localhost, not file://";
+    }
+  }
+  frame.addEventListener("load", paint);
+</script>
+</body>
+</html>
