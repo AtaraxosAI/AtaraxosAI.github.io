@@ -88,8 +88,7 @@ python3 -m http.server 8000
 
 ```
 index.html               markup
-light-preview.html       light-theme preview lens over index.html (open via http://)
-assets/styles.css        dark, minimal theme
+assets/styles.css        dark + paper-light themes (toggle top-right, choice persisted)
 assets/app.js            game rail + video pane + filters + move-by-move frame viewer
 assets/games.json        generated per-game metadata (incl. frame lists)
 Nortrom/frames/          generated per-move AVIFs, full height (game{N}/move{K}.avif)

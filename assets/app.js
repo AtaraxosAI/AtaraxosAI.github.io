@@ -30,6 +30,7 @@ const els = {
   lbSlider: document.getElementById("lb-slider"),
   lbInfo: document.getElementById("lb-frameinfo"),
   lbAccent: document.getElementById("lb-accent"),
+  themeToggle: document.getElementById("theme-toggle"),
 };
 
 let DATA = null;
@@ -43,6 +44,7 @@ let playTimer = null;
 init();
 
 async function init() {
+  wireTheme();   // theme works even if games.json fails to load
   try {
     const res = await fetch("assets/games.json", { cache: "no-cache" });
     DATA = await res.json();
@@ -142,6 +144,19 @@ function renderGameView() {
 // "Detailed Log" opens the per-move frame viewer for the currently selected game.
 function wireGameView() {
   els.detailBtn.addEventListener("click", () => { if (selectedIndex >= 0) openAt(selectedIndex); });
+}
+
+/* Dark <-> light. index.html sets data-theme before first paint; this just
+   flips it, persists the choice, and keeps the button glyph on the target theme. */
+function wireTheme() {
+  const root = document.documentElement;
+  const paint = () => { els.themeToggle.textContent = root.dataset.theme === "light" ? "☾" : "☀"; };
+  els.themeToggle.addEventListener("click", () => {
+    root.dataset.theme = root.dataset.theme === "light" ? "dark" : "light";
+    try { localStorage.setItem("ax-theme", root.dataset.theme); } catch (e) { /* non-persistent mode */ }
+    paint();
+  });
+  paint();
 }
 
 function wireFilters() {

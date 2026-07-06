@@ -24,8 +24,53 @@
 
   --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.45), 0 22px 48px -26px rgba(0, 0, 0, 1);
   --hairline: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-sheet: var(--hairline), 0 44px 120px -54px rgba(0, 0, 0, 1);
+  --shadow-panel: var(--hairline);
+  --shadow-modal: var(--hairline), 0 50px 110px -40px rgba(0, 0, 0, 1);
+  --divider: rgba(255, 255, 255, 0.09);
+  --bg-glow: radial-gradient(1100px 620px at 50% -260px, rgba(139, 155, 255, 0.06), transparent 70%);
   font-synthesis: none;
 }
+
+/* ---------- Light theme: paper palette (off-white buttons on the off-white
+   sheet, separated by a soft warm shade instead of a darker fill) ---------- */
+:root[data-theme="light"] {
+  --bg: #ece8df;
+  --bg-line: rgba(150, 128, 92, 0.07);
+  --sheet: #fdfaf3;
+  --panel: #fdfaf3;
+  --panel-hi: #f5f0e4;
+
+  --ink: #1a1a1a;
+  --ink-soft: #555555;
+  --ink-faint: #8a8a8a;
+
+  --accent: #3b4a9c;
+  --accent-soft: #eceefb;
+
+  --win: #1f9d57;   --win-soft: #e3f5ea;
+  --draw: #b0851f;  --draw-soft: #f6eeda;
+  --loss: #d3493b;  --loss-soft: #fbe7e4;
+
+  /* Buttons read --hairline as their whole shadow: this soft two-layer shade
+     is what separates off-white buttons from the off-white sheet. */
+  --hairline: 0 1px 2px rgba(45, 38, 22, 0.05), 0 2px 8px rgba(45, 38, 22, 0.07);
+  --shadow-lift: 0 2px 4px rgba(45, 38, 22, 0.07), 0 18px 40px -18px rgba(45, 38, 22, 0.28);
+  --shadow-sheet: 0 1px 2px rgba(45, 38, 22, 0.05), 0 14px 44px rgba(45, 38, 22, 0.12);
+  /* Larger enclosures sit a step above the buttons: same paper, deeper shade. */
+  --shadow-panel: 0 1px 2px rgba(45, 38, 22, 0.05), 0 6px 22px rgba(45, 38, 22, 0.08);
+  --shadow-modal: 0 1px 2px rgba(45, 38, 22, 0.08), 0 40px 100px -35px rgba(45, 38, 22, 0.5);
+  --divider: rgba(45, 38, 22, 0.14);
+  --bg-glow: none;
+}
+/* Active states go accent-tinted on paper (the dark theme's inset ring and
+   accent-alpha washes are tuned for ink backgrounds). */
+[data-theme="light"] .game-row.is-selected {
+  background: var(--accent-soft);
+  box-shadow: 0 2px 10px rgba(59, 74, 156, 0.16);
+}
+[data-theme="light"] .detail-btn { box-shadow: 0 2px 10px rgba(59, 74, 156, 0.16); }
+[data-theme="light"] .detail-btn:hover { background: #dfe3f7; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -37,24 +82,37 @@ body {
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  /* Backdrop: a faint diagonal weave over deep ink, with a soft top glow. */
+  /* Backdrop: a faint diagonal weave, plus a soft top glow in the dark theme. */
   background-color: var(--bg);
   background-image:
-    radial-gradient(1100px 620px at 50% -260px, rgba(139, 155, 255, 0.06), transparent 70%),
+    var(--bg-glow),
     repeating-linear-gradient(135deg, var(--bg-line) 0, var(--bg-line) 1px, transparent 1px, transparent 5px);
   background-attachment: fixed;
 }
 
 /* ---------- Sheet: the raised canvas over the backdrop ---------- */
 .sheet {
+  position: relative;             /* anchors the theme toggle to its corner */
   width: calc(100% - 40px);
   max-width: 1080px;
   margin: 52px auto;
   padding: 0 40px 56px;
   background: var(--sheet);
   border-radius: 20px;
-  box-shadow: var(--hairline), 0 44px 120px -54px rgba(0, 0, 0, 1);
+  box-shadow: var(--shadow-sheet);
 }
+
+/* Theme switch in the sheet's top-right corner; shows the theme it switches TO
+   (☀ in dark, ☾ in light). */
+.theme-toggle {
+  position: absolute; top: 18px; right: 18px;
+  appearance: none; cursor: pointer; border: none; border-radius: 999px;
+  width: 38px; height: 38px; font-size: 16px; line-height: 1;
+  color: var(--ink-soft); background: var(--panel); box-shadow: var(--hairline);
+  transition: color .14s, background .14s;
+}
+.theme-toggle:hover { color: var(--ink); background: var(--panel-hi); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ---------- Hero ---------- */
 .hero { max-width: 1000px; margin: 0 auto; padding: 76px 0 8px; text-align: center; }
@@ -80,7 +138,7 @@ body {
   display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
   gap: clamp(22px, 5vw, 48px);
   max-width: 600px; margin: 0 auto; padding: 22px 32px;
-  background: var(--panel); border-radius: var(--radius); box-shadow: var(--hairline);
+  background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-panel);
 }
 .score { display: flex; align-items: flex-start; gap: 16px; }
 .score .unit { display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -92,12 +150,12 @@ body {
 .scoreline .rec-d { color: var(--draw); }
 .wr {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding-left: clamp(22px, 5vw, 48px); border-left: 1px solid rgba(255, 255, 255, 0.08);
+  padding-left: clamp(22px, 5vw, 48px); border-left: 1px solid var(--divider);
 }
 .wr-num { font-weight: 600; font-size: 40px; line-height: 1; color: var(--accent); }
 
 @media (max-width: 440px) {
-  .wr { width: 100%; padding-left: 0; padding-top: 18px; border-left: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+  .wr { width: 100%; padding-left: 0; padding-top: 18px; border-left: 0; border-top: 1px solid var(--divider); }
 }
 
 /* ---------- Section ---------- */
@@ -167,7 +225,7 @@ body {
 /* Right pane: the selected game's replay + entry to the detailed frame viewer. */
 .game-view {
   flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 14px;
-  background: var(--panel); border-radius: var(--radius); box-shadow: var(--hairline); padding: 16px;
+  background: var(--panel); border-radius: var(--radius); box-shadow: var(--shadow-panel); padding: 16px;
 }
 .game-view[hidden] { display: none; }
 .gv-head { display: flex; flex-direction: column; gap: 4px; }
@@ -177,7 +235,7 @@ body {
 .detail-btn {
   flex: none; appearance: none; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600;
   color: var(--accent); background: var(--accent-soft); border: none; border-radius: 999px;
-  padding: 8px 16px; transition: background .14s, transform .14s;
+  padding: 8px 16px; box-shadow: var(--hairline); transition: background .14s, transform .14s;
 }
 .detail-btn:hover { transform: translateY(-1px); background: rgba(139, 155, 255, .22); }
 .detail-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -208,7 +266,7 @@ body {
   position: relative; width: min(1800px, 100%); height: 100%;
   display: flex; flex-direction: column;
   background: var(--sheet); border-radius: 18px; overflow: hidden;
-  box-shadow: var(--hairline), 0 50px 110px -40px rgba(0, 0, 0, 1);
+  box-shadow: var(--shadow-modal);
 }
 /* Outcome color bar across the top of the modal (win/loss/draw), mirroring the tab. */
 .lb-accent { flex: none; height: 4px; background: var(--ink-faint); }
@@ -219,7 +277,7 @@ body {
 .lightbox-bar {
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 10px 16px; padding: 12px 16px;
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .06);
+  box-shadow: inset 0 -1px 0 var(--divider);
 }
 /* Title + date/moves share one baseline row. */
 .lightbox-heading { flex: 0 1 auto; min-width: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
@@ -227,7 +285,7 @@ body {
 .lightbox-meta { margin: 0; color: var(--ink-faint); font-size: 13px; font-variant-numeric: tabular-nums; }
 /* Every control lives in the top bar, so the frame below is never overlapped. */
 .lightbox-controls { flex: 1 1 auto; display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
-.ctrl-divider { flex: none; align-self: stretch; width: 1px; min-height: 22px; margin: 0 3px; background: rgba(255, 255, 255, .12); }
+.ctrl-divider { flex: none; align-self: stretch; width: 1px; min-height: 22px; margin: 0 3px; background: var(--divider); }
 /* t-stepper: previous t · t = value · next t */
 .t-step { flex: none; display: flex; align-items: center; gap: 6px; }
 .t-readout { min-width: 68px; text-align: center; color: var(--ink); font-size: 13px; font-variant-numeric: tabular-nums; }

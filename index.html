@@ -3,6 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    /* Set the theme before first paint: saved choice, else system preference. */
+    try {
+      document.documentElement.dataset.theme = localStorage.getItem("ax-theme") ||
+        (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+    } catch (e) { /* private mode etc. — dark default */ }
+  </script>
   <title>Ataraxos — Stratego game archive</title>
   <meta name="description" content="An archive of Stratego games played by Ataraxos against a Stratego World Champion." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,6 +20,7 @@
 </head>
 <body>
   <div class="sheet">
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">☀</button>
 
     <!-- Hero -->
     <header class="hero">
