@@ -121,7 +121,7 @@ body {
   font-size: clamp(2rem, 5vw, 3rem); line-height: 1.12; letter-spacing: -.02em;
 }
 .subtitle {
-  margin: 18px auto 0; max-width: 60ch;
+  margin: 18px auto 0; max-width: 95ch; text-wrap: balance;
   font-family: var(--serif); font-style: italic; font-size: clamp(1.05rem, 2.3vw, 1.28rem);
   color: var(--ink-soft); line-height: 1.5;
 }
@@ -137,8 +137,8 @@ body {
 [data-theme="light"] .hero-btn:hover { background: #dfe3f7; }
 
 /* ---------- Intro prose ---------- */
-.intro .prose { max-width: 600px; margin: 0 auto; }
-.intro .prose p { margin: 0 0 18px; color: var(--ink-soft); }
+.intro .prose { max-width: 670px; margin: 0 auto; }
+.intro .prose p { margin: 0 0 18px; color: var(--ink-soft); text-wrap: pretty; }
 .intro .prose p:first-child { margin-top: 0; }
 .intro .prose p:last-child { margin-bottom: 0; }
 
