@@ -1,11 +1,7 @@
-# Nortrom — µStratego game archive
+# Ataraxos vs. Pim Niemeijer
 
-A minimal, static showcase of 20 Stratego games played by **Nortrom**, a neural
-search agent. Open a game to step through it move by move in the µStratego
-analysis view (board, value predictions, MCTS policy/search, opponent belief
-grid).
-
-**Record: 15W · 1L · 4D** (empirical value 0.700).
+A static showcase of the 20-game match between four-time Stratego world champion Pim Niemeijer and the Stratego AI Ataraxos.
+Ataraxos won the series with 15 wins, 1 loss, and 4 draws.
 
 ## The move-by-move viewer
 
