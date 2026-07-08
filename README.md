@@ -43,25 +43,10 @@ python build.py --workers 2     # limit frame encoding to 2 cores
 python compress_logs.py --width 1400 --quality 45
 ```
 
-## Deploy to GitHub Pages
-
-```sh
-git init
-git add .
-git commit -m "Nortrom game archive"
-git branch -M main
-git remote add origin git@github.com:<you>/<repo>.git
-git push -u origin main
-```
-
-Then in the repo: **Settings → Pages → Source: Deploy from a branch → `main` / root**.
-The site will be served at `https://<you>.github.io/<repo>/`.
-
 ## Local preview
 
 ```sh
 python3 -m http.server 8000
-# open http://localhost:8000
 ```
 
 ## Files
@@ -71,8 +56,7 @@ index.html               markup
 assets/styles.css        dark + paper-light themes (toggle top-right, choice persisted)
 assets/app.js            game rail + video pane + filters + move-by-move frame viewer
 assets/games.json        generated per-game metadata (incl. frame lists)
-Nortrom/frames/          generated per-move AVIFs, full height (game{N}/move{K}.avif)
-Nortrom/frames_cropped/  same frames, black bottom trimmed — what the viewer loads
+Nortrom/frames_cropped/  per-move AVIFs, black bottom trimmed — what the viewer loads
 build.py                 regenerates games.json + frames
 compress_logs.py         PNG→AVIF frame compressor (used by build.py; also standalone)
 ```
