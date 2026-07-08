@@ -29,28 +29,12 @@ builds one URL at a time.
   (plus a couple prefetched neighbors); the `src` is dropped on close. The whole
   sequence is never in memory at once.
 
-## What is / isn't committed
-
-| Path | Size | In repo? |
-|------|------|----------|
-| `Nortrom/frames_cropped/` (per-move AVIFs, bottom-cropped) | **~0.7 GB** | ⚠️ used by the viewer — see note |
-| `Nortrom/frames/` (per-move AVIFs, full height) | **~0.6 GB** | full-height renders; not fetched by the site |
-| `Nortrom/videos/` | 43 MB | ✅ per-game replay videos (shown in the right pane) |
-| `Nortrom/logs/` (raw per-move PNGs) | **12 GB** | ❌ ignored via `.gitignore` |
-
-**Heads up on repo size.** The two AVIF trees together are ~1.3 GB, over
-GitHub's ~1 GB repo soft limit. Options: commit only `frames_cropped/` (the one
-the site fetches), shrink further (`--width 1400 --quality 45`), or host the
-frames on a CDN / object store and point the viewer there. The raw PNGs stay
-excluded (~453 MB/game, far over GitHub's limits).
-
 ## Rebuilding metadata / frames
 
-Regenerate everything from the logs (needs `Nortrom/logs/` present locally; uses
-`pillow-avif-plugin` for the frames):
+Regenerate everything from the raw logs (needs a Python env with `pillow` and
+`pillow-avif-plugin` installed):
 
 ```sh
-conda activate pytorch          # env with pillow + pillow-avif-plugin
 python build.py                 # games.json + all frames (~2 min)
 python build.py --no-frames     # metadata only (fast)
 python build.py --workers 2     # limit frame encoding to 2 cores
